@@ -4,6 +4,7 @@ const consoleTable = require("console.table");
 const db = require('./db');
 
 
+// Ref: 12-01-11
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -53,7 +54,7 @@ function init() {
                 break;
         }
     })
-}
+};
 
 
 
@@ -64,7 +65,7 @@ const departmentArray = []
 
 // WHEN I choose to view all departments
 // THEN I am presented with a formatted table showing department names and department ids
-const viewDepartments = () => db.query('SELECT * FROM department', (err, results) => {
+const viewDepartments = () => db.query('SELECT * FROM departments', (err, results) => {
     if (err) {
         console.log(err)
     } else {
