@@ -1,22 +1,77 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const express = require('express');
 const consoleTable = require("console.table");
+const db = require('./db');
+
+
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'employee_tracker'
+    },
+    console.log(`Successfully connected to the database`)
+);
+
+
 
 // Initial prompt
-const start = [
-    {
-        type: "list",
-        message: "What would you like to do?",
-        choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"],
-        name: "start",
-    },
-]
+function init() {
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "What would you like to do?",
+            choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role", "I'm done"],
+            name: "start",
+        },
+    ]).then((data) => {
+        switch (data.start) {
+            case 'View all departments':
+                viewDepartments();
+                break;
+            case 'View all roles':
+                viewRoles();
+                break;
+            case 'View all employees':
+                viewEmployees();
+                break;
+            case 'Add a department':
+                addDepartment();
+                break;
+            case 'Add a role':
+                addRole();
+                break;
+            case 'Add an employee':
+                addEmployee();
+                break;
+            case 'Update an employee role':
+                updateRole();
+                break;
+            case "I'm done":
+                done();
+                break;
+        }
+    })
+}
+
+
+
+
+// Arrays
+const departmentArray = []
 
 
 // WHEN I choose to view all departments
 // THEN I am presented with a formatted table showing department names and department ids
-viewDepartments();
+const viewDepartments = () => db.query('SELECT * FROM department', (err, results) => {
+    if (err) {
+        console.log(err)
+    } else {
+        console.table('\x1b[33m', results)
+    }
+    init();
+});
 
 // WHEN I choose to view all roles
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
@@ -43,35 +98,10 @@ addEmployee();
 updateRole();
 
 
-
-// Function for the selected options
-function options() {
-    inquirer.prompt(start).then((response) => {
-        if (response.start === "View all departments") {
-            viewDepartments();
-        } else if (response.start === "View all roles") {
-            viewRoles();
-        } else if (response.start === "View all employees") {
-            viewEmployees();
-        } else if (response.start === "Add a department") {
-            addDepartment();
-        } else if (response.start === "Add a role") {
-            addRole();
-        } else if (response.start === "Add an employee") {
-            addEmployee();
-        } else if (response.start === "Update an employee role") {
-            updateRole();
-        }
-    });
+function done() {
+    process.exit();
 }
 
-
-// Initialize the app
-function init() {
-    inquirer.prompt(start).then((response => {
-    })
-    );
-}
 
 
 init();
