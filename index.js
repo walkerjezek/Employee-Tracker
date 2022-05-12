@@ -60,7 +60,9 @@ function init() {
 
 
 // Arrays
-const departmentArray = []
+const departmentArray = [];
+const roleArray = [];
+const employeeArray = [];
 
 
 // WHEN I choose to view all departments
@@ -76,15 +78,46 @@ const viewDepartments = () => db.query('SELECT * FROM departments', (err, result
 
 // WHEN I choose to view all roles
 // THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-viewRoles();
+const viewRoles = () => db.query('SELECT * FROM roles', (err, results) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.table('\x1b[33m', results)
+    }
+    init();
+});
 
 // WHEN I choose to view all employees
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-viewEmployees();
+const viewEmployees = () => db.query('SELECT * FROM employees', (err, results) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.table('\x1b[33m', results)
+    }
+    init();
+});
 
 // WHEN I choose to add a department
 // THEN I am prompted to enter the name of the department and that department is added to the database
-addDepartment();
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter the name of the department you would like to add",
+            name: "newDepartment",
+        },
+    ]).then((res) => {
+        db.query('INSERT INTO departments (name) VALUES (?)', res.newDepartment, (err, results) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.table('\x1b[33m', results)
+            }
+            init();
+        })
+    })
+};
 
 // WHEN I choose to add a role
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database

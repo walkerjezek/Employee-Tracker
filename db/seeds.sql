@@ -23,8 +23,8 @@ VALUES
 INSERT INTO employees (roleId, firstName, lastName)
 VALUES 
         ( 3, "Walker", "Jezek"  ),
-        ( 2,  ),
-        ( 3,  ),
-        ( 4,  ),
-        ( 5,  ),
-        ( 6,  );
+        ( 2, "John", "Smith" ),
+        ( 3, "Sam", "Reynolds" ),
+        ( 4, "Matt", "Jones" ),
+        ( 5, "Margo", "Jane" ),
+        ( 6, "Alex", "Honnold" );
