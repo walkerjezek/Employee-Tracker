@@ -112,7 +112,10 @@ const addDepartment = () => {
             if (err) {
                 console.log(err);
             } else {
-                console.table('\x1b[33m', results)
+                for (let departments of results) {
+                    departmentArray.push(departments.newDepartment);
+                };
+                console.table('\x1b[33m', results);
             }
             init();
         })
@@ -121,17 +124,87 @@ const addDepartment = () => {
 
 // WHEN I choose to add a role
 // THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-addRole();
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the name of the role you would like to add?',
+            name: 'newRole'
+        },
+        {
+            type: 'list',
+            message: 'What department would you like to assign this role to?',
+            name: 'addToDepartment',
+            choices: departmentArray
+        },
+        {
+            type: 'input',
+            message: 'What salary would you like to asign to this role',
+            name: 'newSalary'
+        },
+    ]).then((res) => {
+        db.query('INSERT INTO roles (departmentId, title, salary) VALUE (?, ?, ?)', [res.addToDepartment, res.newRole, res.newSalary], (err, results) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.table(results);
+            }
+        })
+    })
+    init();
+};
 
 // WHEN I choose to add an employee
 // THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-addEmployee();
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the new employees first name?',
+            name: 'newEmpFirst'
+        },
+        {
+            type: 'input',
+            message: 'What is the new employees last name?',
+            name: 'newEmplast'
+        },
+        {
+            type: 'list',
+            message: 'What is the new employees role?',
+            name: 'newEmpRole',
+            choices: roleArray
+        },
+        {
+            type: 'list',
+            message: 'Who is the new employees manager?',
+            name: 'newEmpRole',
+            choices: employeeArray
+        },
+    ])
+};
 
 // WHEN I choose to update an employee role
 // THEN I am prompted to select an employee to update and their new role and this information is updated in the database 
-updateRole();
+const updateRole = () => {
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'What emplyee would you like to update?',
+            name: 'updateRole',
+            choices: employeeArray
+        },
+        {
+            type: 'list',
+            message: 'What role would you like to assign to this employee?',
+            name: 'updateRole',
+            choices: roleArray
+        },
+    ])
+};
 
 
+
+// End the process when the user selects I'm Done
 function done() {
     process.exit();
 }
