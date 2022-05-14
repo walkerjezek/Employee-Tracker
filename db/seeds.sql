@@ -1,12 +1,12 @@
 -- Ref: 12-01-07
-INSERT INTO departments (name)
+INSERT INTO departments (departmentName)
 VALUES 
         ( "Sales" ),
         ( "Finance" ),
         ( "Operations" ),
         ( "Marketing" ),
         ( "Engineering" ),
-        ( "Legal" );
+        ( "Legal" ),
         ( "Human Resources" );
 
 INSERT INTO roles (departmentId, title, salary)
@@ -16,8 +16,8 @@ VALUES
         ( 2, "Analyst", 75000 ),
         ( 2, "Accountant", 75000 ),
         ( 2, "Auditor", 80000 ),
-        ( 4, "Analyst" 75000 ),
-        ( 3, "Coordinator", 60000 );
+        ( 4, "Analyst", 75000 ),
+        ( 3, "Coordinator", 60000 ),
         ( 5, "Engineer", 90000 );
 
 INSERT INTO employees (roleId, firstName, lastName)

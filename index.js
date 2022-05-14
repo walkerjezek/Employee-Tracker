@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consoleTable = require("console.table");
-const db = require('./db');
+// const db = require('./db');
 
 
 // Ref: 12-01-11
