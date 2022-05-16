@@ -185,20 +185,21 @@ const addEmployee = () => {
         },
     ]).then((res) => {
         let roleId;
-        db.query('SELECT (id) FROM roles WHERE tile=(?)', res.roleId, (err, results) => {
+        db.query('SELECT (id) FROM roles WHERE roleId=(?)', res.newEmpRole, (err, results) => {
             if (err) {
                 console.log(err);
             } else {
                 roleId = results[0].id
             }
-        })
 
-        db.query('INSERT INTO employees (newEmpFirst, newEmpLast, newEmpRole, newEmpManager) VALUE (?, ?, ?, ?)', [res.newEmpFirst, res.newEmpLast, res.newEmpRole, res.newEmpManager], (err, results) => {
+        let managerId;
+        db.query('INSERT INTO employees (firstName, lastName, roleId, managerId) VALUE (?, ?, ?, ?)', [res.newEmpFirst, res.newEmpLast, roleId, managerId], (err, results) => {
             if (err) {
                 console.log(err);
             } else {
                 viewEmployees();
             }
+        })
             init();
         })
     })
