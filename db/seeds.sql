@@ -26,5 +26,5 @@ VALUES
         ( 2, "John", "Smith" ),
         ( 3, "Sam", "Reynolds" ),
         ( 4, "Matt", "Jones" ),
-        ( 5, "Margo", "Jane" ),
+        ( 5, "Margo", "Jain" ),
         ( 6, "Alex", "Honnold" );
