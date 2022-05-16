@@ -104,18 +104,15 @@ const addDepartment = () => {
     inquirer.prompt([
         {
             type: "input",
-            message: "Enter the name of the department you would like to add",
+            message: "Enter the name of the department you would like to add: ",
             name: "newDepartment",
         },
     ]).then((res) => {
-        db.query('INSERT INTO departments (name) VALUES (?)', res.newDepartment, (err, results) => {
+        db.query('INSERT INTO departments (departmentName) VALUES (?)', res.newDepartment, (err, results) => {
             if (err) {
                 console.log(err);
             } else {
-                for (let departments of results) {
-                    departmentArray.push(departments.newDepartment);
-                };
-                console.table('\x1b[33m', results);
+                viewDepartments();
             }
             init();
         })
@@ -132,10 +129,9 @@ const addRole = () => {
             name: 'newRole'
         },
         {
-            type: 'list',
+            type: 'input',
             message: 'What department would you like to assign this role to?',
             name: 'addToDepartment',
-            choices: departmentArray
         },
         {
             type: 'input',
@@ -143,15 +139,15 @@ const addRole = () => {
             name: 'newSalary'
         },
     ]).then((res) => {
-        db.query('INSERT INTO roles (departmentId, title, salary) VALUE (?, ?, ?)', [res.addToDepartment, res.newRole, res.newSalary], (err, results) => {
+        db.query('INSERT INTO roles (title, departmentId, salary) VALUE (?, ?, ?)', [res.newRole, res.addToDepartment, res.newSalary], (err, results) => {
             if (err) {
                 console.log(err);
             } else {
-                console.table(results);
+                viewRoles();
             }
+            init();
         })
     })
-    init();
 };
 
 // WHEN I choose to add an employee
@@ -166,21 +162,28 @@ const addEmployee = () => {
         {
             type: 'input',
             message: 'What is the new employees last name?',
-            name: 'newEmplast'
+            name: 'newEmpLast'
         },
         {
-            type: 'list',
+            type: 'input',
             message: 'What is the new employees role?',
             name: 'newEmpRole',
-            choices: roleArray
         },
         {
-            type: 'list',
+            type: 'input',
             message: 'Who is the new employees manager?',
-            name: 'newEmpRole',
-            choices: employeeArray
+            name: 'newEmpManager',
         },
-    ])
+    ]).then((res) => {
+        db.query('INSERT INTO employees (newEmpFirst, newEmpLast, newEmpRole, newEmpManager) VALUE (?, ?, ?, ?)', [res.newEmpFirst, res.newEmpLast, res.newEmpRole, res.newEmpManager], (err, results) => {
+            if (err) {
+                console.log(err);
+            } else {
+                viewEmployees();
+            }
+            init();
+        })
+    })
 };
 
 // WHEN I choose to update an employee role
@@ -188,18 +191,25 @@ const addEmployee = () => {
 const updateRole = () => {
     inquirer.prompt([
         {
-            type: 'list',
+            type: 'input',
             message: 'What emplyee would you like to update?',
-            name: 'updateRole',
-            choices: employeeArray
+            name: 'updateEmployee',
         },
         {
-            type: 'list',
+            type: 'input',
             message: 'What role would you like to assign to this employee?',
             name: 'updateRole',
-            choices: roleArray
         },
-    ])
+    ]).then((res) => {
+        db.query('INSERT INTO roles (updateEmployee, updateRole) VALUE (?, ?)', [res.updateEmplyee, res.updateRole], (err, results) => {
+            if (err) {
+                console.log(err);
+            } else {
+                viewRoles();
+            }
+            init();
+        })
+    })
 };
 
 
