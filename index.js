@@ -139,12 +139,21 @@ const addRole = () => {
             name: 'newSalary'
         },
     ]).then((res) => {
-        db.query('INSERT INTO roles (title, departmentId, salary) VALUE (?, ?, ?)', [res.newRole, res.addToDepartment, res.newSalary], (err, results) => {
+        let departmentId;
+        db.query('SELECT (id) FROM departments WHERE name=(?)', res.departmentId, (err, results) => {
+            if (err) {
+                console.log(err);
+            } else {
+                departmentId = results[0].id
+            }
+        
+        db.query('INSERT INTO roles (title, departmentId, salary) VALUE (?, ?, ?)', [res.newRole, departmentId, res.newSalary], (err, results) => {
             if (err) {
                 console.log(err);
             } else {
                 viewRoles();
             }
+            })
             init();
         })
     })
@@ -175,6 +184,15 @@ const addEmployee = () => {
             name: 'newEmpManager',
         },
     ]).then((res) => {
+        let roleId;
+        db.query('SELECT (id) FROM roles WHERE tile=(?)', res.roleId, (err, results) => {
+            if (err) {
+                console.log(err);
+            } else {
+                roleId = results[0].id
+            }
+        })
+
         db.query('INSERT INTO employees (newEmpFirst, newEmpLast, newEmpRole, newEmpManager) VALUE (?, ?, ?, ?)', [res.newEmpFirst, res.newEmpLast, res.newEmpRole, res.newEmpManager], (err, results) => {
             if (err) {
                 console.log(err);
